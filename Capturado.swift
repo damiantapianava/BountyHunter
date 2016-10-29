@@ -7,7 +7,9 @@
 //
 
 import UIKit
-
+import CoreLocation
+import MapKit
+import Social
 
 class Capturado: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate
 {
@@ -64,6 +66,8 @@ class Capturado: UIViewController, UINavigationControllerDelegate, UIImagePicker
     {
         let image:UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         
+        //let image:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
+        
         let selectedFoto:UIImageView = UIImageView(image: image)
         
         self.imgCapturado.image = selectedFoto.image
@@ -95,24 +99,99 @@ class Capturado: UIViewController, UINavigationControllerDelegate, UIImagePicker
             
             let googleMapsURL = "https://www.google.com.mx/maps/@\(self.fugitiveInfo?.capturedLat),\(self.fugitiveInfo?.capturedLon)"
             
-            let text = "\(self.fugitiveInfo!.name!) fue capturado en \(googleMapsURL)."
+            let texto = "\(self.fugitiveInfo!.name!) fue capturado en \(googleMapsURL)."
             
-            //let lafoto = UIImage(data: self.fugitiveInfo!.image!)
+            let laFoto = UIImage(data: self.fugitiveInfo!.image!)
             
             let image = UIImage(named: "fugitivo")
             
-            let items: Array<AnyObject> = [text, image!]
+            let feizbuc_ENABLED = SLComposeViewController.isAvailableForServiceType(SLServiceTypeFacebook)
             
-            let avc = UIActivityViewController(activityItems: items, applicationActivities: nil)
+            let tuiter_ENABLED  = SLComposeViewController.isAvailableForServiceType(SLServiceTypeTwitter)
             
-            avc.setValue("Fugitivo Capturado", forKey: "Subject")
-            
-            self.presentViewController(avc, animated: true, completion:
+            if feizbuc_ENABLED && tuiter_ENABLED
             {
-                self.navigationController?.popViewControllerAnimated(true)
-            })
+                let ac = UIAlertController(title: "Compartir", message: "Compartir captura con...", preferredStyle: .Alert)
+                
+                let btnFeiz = UIAlertAction(title: "Facebook", style: .Default, handler:
+                {
+                    (UIAlertAction) in
+                    
+                    let feizbuc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+                    
+                    feizbuc.setInitialText(texto)
+                    feizbuc.addImage(laFoto!)
+                    
+                    self.presentViewController(feizbuc, animated: true, completion:
+                    {
+                        self.navigationController?.popViewControllerAnimated(true)
+                    })
+                })
+                
+                let btnTuit = UIAlertAction(title: "Twitter", style: .Default, handler:
+                {
+                    (UIAlertAction) in
+                        
+                    let tuiter = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+                        
+                    tuiter.setInitialText(texto)
+                    tuiter.addImage(laFoto!)
+                        
+                    self.presentViewController(tuiter, animated: true, completion:
+                    {
+                                self.navigationController?.popViewControllerAnimated(true)
+                    })
+                })
+                
+                ac.addAction(btnFeiz)
+                ac.addAction(btnTuit)
+                
+                self.presentViewController(ac, animated: true, completion: nil)
+            }
             
-
+            else if feizbuc_ENABLED
+            {
+                let feizbuc = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+                
+                feizbuc.setInitialText(texto)
+                feizbuc.addImage(laFoto!)
+                
+                self.presentViewController(feizbuc, animated: true, completion:
+                {
+                    self.navigationController?.popViewControllerAnimated(true)
+                })
+            }
+            
+            else if tuiter_ENABLED
+            {
+                let tuiter = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+                
+                tuiter.setInitialText(texto)
+                tuiter.addImage(laFoto!)
+                
+                self.presentViewController(tuiter, animated: true, completion:
+                {
+                    self.navigationController?.popViewControllerAnimated(true)
+                })
+            }
+            
+            else
+            {
+                //let items: Array<AnyObject> = [texto, image!]
+                let items:Array<AnyObject> = [texto, laFoto!, image!]
+                
+                let avc = UIActivityViewController(activityItems: items, applicationActivities: nil)
+                
+                // esto solo es necesario para el caso del correo
+                avc.setValue("Fugitivo Capturado!", forKey:"Subject") // jan.zelaznog@gmail.com
+                
+                self.presentViewController(avc, animated: true, completion:
+                {
+                    self.navigationController?.popViewControllerAnimated(true)
+                })
+                
+                self.navigationController?.popViewControllerAnimated(true) // esta linea me regresa
+            }
             
         } catch {
             
