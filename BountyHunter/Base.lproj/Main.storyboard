@@ -38,7 +38,7 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6Qh-1N-pAf" id="LlN-5w-YYS">
-                                    <frame key="frameInset" width="375" height="44"/>
+                                    <frame key="frameInset" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -84,7 +84,7 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="V4D-63-xmf" id="xyX-Yu-t7m">
-                                    <frame key="frameInset" width="375" height="44"/>
+                                    <frame key="frameInset" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -336,6 +336,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btnGuardarOutlet" destination="rW5-nW-ZEr" id="rmX-iw-DgO"/>
                         <outlet property="imgCapturado" destination="3kl-xq-kTP" id="lg2-na-FBE"/>
                         <outlet property="txtDelito" destination="rPY-0u-xTe" id="Day-yX-nmo"/>
                         <outlet property="txtNombre" destination="y0T-PB-Ebn" id="uJC-l3-XI1"/>

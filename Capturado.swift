@@ -18,6 +18,7 @@ class Capturado: UIViewController, UINavigationControllerDelegate, UIImagePicker
     @IBOutlet weak var txtDelito: UILabel!
     @IBOutlet weak var txtRecompensa: UILabel!
     @IBOutlet weak var imgCapturado: UIImageView!
+    @IBOutlet weak var btnGuardarOutlet: UIButton!
     
     var fugitiveInfo: Fugitive?
     
@@ -185,17 +186,27 @@ class Capturado: UIViewController, UINavigationControllerDelegate, UIImagePicker
                 // esto solo es necesario para el caso del correo
                 avc.setValue("Fugitivo Capturado!", forKey:"Subject") // jan.zelaznog@gmail.com
                 
-                self.presentViewController(avc, animated: true, completion:
+                if UIDevice.currentDevice().userInterfaceIdiom == .Phone
                 {
-                    self.navigationController?.popViewControllerAnimated(true)
-                })
                 
-                self.navigationController?.popViewControllerAnimated(true) // esta linea me regresa
+                    self.presentViewController(avc, animated: true, completion:
+                    {
+                        self.navigationController?.popViewControllerAnimated(true)
+                    })
+                
+                    self.navigationController?.popViewControllerAnimated(true) // esta linea me regresa
+                    
+                } else {
+                    
+                    let popover = UIPopoverController(contentViewController: avc)
+                    
+                    popover.presentPopoverFromRect(self.btnGuardarOutlet.frame, inView: self.view, permittedArrowDirections: .Any, animated: true)
+                }
             }
             
         } catch {
             
-            print("ERROR")
+            print("ERROR: Al salvar la BD")
         }
     }
 }
